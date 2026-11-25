@@ -63,36 +63,6 @@ resource stagingApp 'Microsoft.Web/sites@2023-12-01' = {
 }
 
 // ==========================================
-// 3. PRODUCTION APP SERVICE
-// ==========================================
-
-resource productionApp 'Microsoft.Web/sites@2023-12-01' = {
-  name: productionAppName
-  location: location
-  kind: 'app'
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    serverFarmId: appServicePlan.id
-    httpsOnly: true
-
-    siteConfig: {
-      netFrameworkVersion: 'v10.0'
-      ftpsState: 'Disabled'
-      minTlsVersion: '1.2'
-      http20Enabled: true
-      metadata: [
-        {
-          name: 'CURRENT_STACK'
-          value: 'dotnet'
-        }
-      ]
-    }
-  }
-}
-
-// ==========================================
 // 4. STORAGE ACCOUNT
 // ==========================================
 
@@ -170,7 +140,6 @@ output productionAppName string = productionApp.name
 
 output stagingUrl string = 'https://${stagingApp.properties.defaultHostName}'
 
-output productionUrl string = 'https://${productionApp.properties.defaultHostName}'
 
 output storageAccountName string = storageAccount.name
 
@@ -180,4 +149,3 @@ output keyVaultName string = keyVault.name
 
 output stagingPrincipalId string = stagingApp.identity.principalId
 
-output productionPrincipalId string = productionApp.identity.principalId
