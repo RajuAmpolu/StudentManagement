@@ -7,7 +7,7 @@ on:
       - master
     paths:
       - 'infra/**'
-      - '.github/workflows/infra/bicep-validate.yml'
+      - '.github/workflows/bicep-validate.yml'
 
 permissions:
   id-token: write
@@ -32,4 +32,4 @@ jobs:
         run: |
           az deployment group validate `
             --resource-group StudentManagement-staging `
-            --template-file infra/main.bicep
+            --template-file .github/workflows/infra/main.bicep
