@@ -23,10 +23,10 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore StudentManagement/StudentManagement.sln
+        run: dotnet restore StudentManagement/StudentManagement.slnx
 
       - name: Build Application
-        run: dotnet build StudentManagement/StudentManagement.sln --configuration Release --no-restore
+        run: dotnet build StudentManagement/StudentManagement.slnx --configuration Release --no-restore
 
       - name: Publish Application
         run: dotnet publish StudentManagement/StudentManagement/StudentManagement.csproj --configuration Release --no-build -o ./publish
