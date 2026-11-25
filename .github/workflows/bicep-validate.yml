@@ -33,3 +33,8 @@ jobs:
           az deployment group validate `
             --resource-group StudentManagement-staging `
             --template-file .github/workflows/infra/main.bicep
+      - name: Preview Infrastructure Changes
+        run: |
+          az deployment group what-if `
+            --resource-group StudentManagement-staging `
+            --template-file .github/workflows/infra/main.bicep
