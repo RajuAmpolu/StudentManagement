@@ -23,13 +23,13 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore Dependencies
-        run: dotnet restore StudentManagement.sln
+        run: dotnet restore StudentManagement/StudentManagement.sln
 
       - name: Build Application
-        run: dotnet build StudentManagement.sln --configuration Release --no-restore
+        run: dotnet build StudentManagement/StudentManagement.sln --configuration Release --no-restore
 
       - name: Publish Application
-        run: dotnet publish StudentManagement/StudentManagement.csproj --configuration Release --no-build -o ./publish
+        run: dotnet publish StudentManagement/StudentManagement/StudentManagement.csproj --configuration Release --no-build -o ./publish
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
