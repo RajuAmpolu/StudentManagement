@@ -6,7 +6,7 @@ on:
     branches:
       - master
     paths:
-      - 'infra/**'
+      - '.github/workflows/infra/**'
       - '.github/workflows/bicep-validate.yml'
 
 permissions:
@@ -21,6 +21,19 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Verify Bicep Template
+        run: |
+          Write-Host "Current branch:"
+          git branch --show-current
+
+          Write-Host "Checking Bicep file:"
+          Get-Content .github/workflows/infra/main.bicep
+
+          Write-Host "Checking for Production resources:"
+          if (Select-String -Path .github/workflows/infra/main.bicep -Pattern 'production') {
+            throw "Production resource found in Bicep template!"
+          }
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -33,6 +46,7 @@ jobs:
           az deployment group validate `
             --resource-group StudentManagement-staging `
             --template-file .github/workflows/infra/main.bicep
+
       - name: Preview Infrastructure Changes
         run: |
           az deployment group what-if `
