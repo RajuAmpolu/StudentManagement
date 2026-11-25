@@ -8,7 +8,6 @@ param location string = resourceGroup().location
 var suffix = uniqueString(resourceGroup().id)
 
 var stagingAppName = 'studentmanagement-staging-${suffix}'
-var productionAppName = 'studentmanagement-production-${suffix}'
 
 var storageAccountName = 'studentmgmt${suffix}'
 var keyVaultName = 'sm-kv-${suffix}'
@@ -40,9 +39,11 @@ resource stagingApp 'Microsoft.Web/sites@2023-12-01' = {
   name: stagingAppName
   location: location
   kind: 'app'
+
   identity: {
     type: 'SystemAssigned'
   }
+
   properties: {
     serverFarmId: appServicePlan.id
     httpsOnly: true
@@ -52,6 +53,7 @@ resource stagingApp 'Microsoft.Web/sites@2023-12-01' = {
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
       http20Enabled: true
+
       metadata: [
         {
           name: 'CURRENT_STACK'
@@ -63,7 +65,7 @@ resource stagingApp 'Microsoft.Web/sites@2023-12-01' = {
 }
 
 // ==========================================
-// 4. STORAGE ACCOUNT
+// 3. STORAGE ACCOUNT
 // ==========================================
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
@@ -84,7 +86,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
 }
 
 // ==========================================
-// 5. BLOB SERVICE
+// 4. BLOB SERVICE
 // ==========================================
 
 resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' = {
@@ -93,7 +95,7 @@ resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01'
 }
 
 // ==========================================
-// 6. BLOB CONTAINER
+// 5. BLOB CONTAINER
 // ==========================================
 
 resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
@@ -106,7 +108,7 @@ resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/container
 }
 
 // ==========================================
-// 7. KEY VAULT
+// 6. KEY VAULT
 // ==========================================
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
@@ -131,15 +133,12 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
 }
 
 // ==========================================
-// 8. OUTPUTS
+// 7. OUTPUTS
 // ==========================================
 
 output stagingAppName string = stagingApp.name
 
-output productionAppName string = productionApp.name
-
 output stagingUrl string = 'https://${stagingApp.properties.defaultHostName}'
-
 
 output storageAccountName string = storageAccount.name
 
@@ -148,4 +147,3 @@ output blobContainerName string = blobContainer.name
 output keyVaultName string = keyVault.name
 
 output stagingPrincipalId string = stagingApp.identity.principalId
-
